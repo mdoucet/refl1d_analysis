@@ -1,0 +1,140 @@
+-- Model 0 None
+.probe
+  .Aguide = Parameter(270, name='Aguide')
+  .H = Parameter(0, name='H')
+  .mm
+    .back_absorption = Parameter(1, name='back_absorption')
+    .background = Parameter(6.6374e-06, name='background', bounds=(0,9e-05))
+    .intensity = Parameter(1.07135, name='intensity', bounds=(0.8,2))
+    .theta_offset = Parameter(0, name='theta_offset')
+  .mp = None
+  .pm = None
+  .pp
+    .back_absorption = Parameter(1, name='back_absorption')
+    .background = Parameter(2.7e-08, name='background')
+    .intensity = Parameter(1, name='intensity')
+    .theta_offset = Parameter(0, name='theta_offset')
+.sample
+  .layers
+    [0]
+      .interface = Parameter(4.41379, name='LSAT interface', bounds=(0,100))
+      .material
+        .irho = Parameter(0, name='LSAT irho')
+        .rho = Parameter(4.65363, name='LSAT rho', bounds=(0,10))
+      .thickness = Parameter(0, name='LSAT thickness')
+    [1]
+      .interface = Parameter(0.115827, name='MGN_1 interface', bounds=(0,200))
+      .magnetism
+        .dead_above = Parameter(0, name='MGN_1 deadM above')
+        .dead_below = Parameter(0, name='MGN_1 deadM below')
+        .interface_above = Parameter(185.102, name='MGN_1  interfaceM above')
+        .interface_below = Parameter(0.833997, name='MGN_1 interfaceM below')
+        .rhoM = Parameter(0.139395, name='MGN_1 rhoM')
+        .thetaM = Parameter(90, name='MGN_1 thetaM')
+      .material
+        .irho = Parameter(-0, name='MGN_1 irho')
+        .rho = Parameter(0.906509, name='MGN_1 rho', bounds=(0,10))
+      .thickness = Parameter(175.84, name='MGN_1 thickness', bounds=(0,400))
+    [2]
+      .interface = Parameter(29.7645, name='MGN_2 interface', bounds=(0,200))
+      .magnetism
+        .dead_above = Parameter(0, name='MGN_2 deadM above')
+        .dead_below = Parameter(0, name='MGN_2 deadM below')
+        .interface_above = Parameter(2.80685, name='MGN_2  interfaceM above')
+        .interface_below = Parameter(60.3685, name='MGN_2 interfaceM below')
+        .rhoM = Parameter(-0.0997781, name='MGN_2 rhoM')
+        .thetaM = Parameter(90, name='MGN_2 thetaM')
+      .material
+        .irho = Parameter(-0, name='MGN_2 irho')
+        .rho = Parameter(2.39381, name='MGN_2 rho', bounds=(0,10))
+      .thickness = Parameter(67.8199, name='MGN_2 thickness', bounds=(0,400))
+    [3]
+      .interface = Parameter(0, name='air interface')
+      .material = None
+      .thickness = Parameter(0, name='air thickness')
+  .thickness = stack thickness:243.659
+
+[chisq=21.162(86), nllf=1417.89]
+-- Model 1 None
+.probe
+  .Aguide = Parameter(270, name='Aguide')
+  .H = Parameter(0, name='H')
+  .mm
+    .back_absorption = Parameter(1, name='back_absorption')
+    .background = Parameter(1.32767e-08, name='background', bounds=(0,9e-05))
+    .intensity = Parameter(0.894197, name='intensity', bounds=(0.8,2))
+    .theta_offset = Parameter(0, name='theta_offset')
+  .mp = None
+  .pm = None
+  .pp
+    .back_absorption = Parameter(1, name='back_absorption')
+    .background = Parameter(2.7e-08, name='background')
+    .intensity = Parameter(1, name='intensity')
+    .theta_offset = Parameter(0, name='theta_offset')
+.sample
+  .layers
+    [0]
+      .interface = Parameter(4.41379, name='LSAT interface', bounds=(0,100))
+      .material
+        .irho = Parameter(0, name='LSAT irho')
+        .rho = Parameter(4.65363, name='LSAT rho', bounds=(0,10))
+      .thickness = Parameter(0, name='LSAT thickness')
+    [1]
+      .interface = Parameter(0.115827, name='MGN_1 interface', bounds=(0,200))
+      .magnetism
+        .dead_above = Parameter(0, name='MGN_1 deadM above')
+        .dead_below = Parameter(0, name='MGN_1 deadM below')
+        .interface_above = Parameter(199.292, name='MGN_1  interfaceM above')
+        .interface_below = Parameter(179.827, name='MGN_1 interfaceM below')
+        .rhoM = Parameter(0.0212442, name='MGN_1 rhoM')
+        .thetaM = Parameter(90, name='MGN_1 thetaM')
+      .material
+        .irho = Parameter(-0, name='MGN_1 irho')
+        .rho = Parameter(0.906509, name='MGN_1 rho', bounds=(0,10))
+      .thickness = Parameter(175.84, name='MGN_1 thickness', bounds=(0,400))
+    [2]
+      .interface = Parameter(29.7645, name='MGN_2 interface', bounds=(0,200))
+      .magnetism
+        .dead_above = Parameter(0, name='MGN_2 deadM above')
+        .dead_below = Parameter(0, name='MGN_2 deadM below')
+        .interface_above = Parameter(52.6388, name='MGN_2  interfaceM above')
+        .interface_below = Parameter(138.957, name='MGN_2 interfaceM below')
+        .rhoM = Parameter(-0.229333, name='MGN_2 rhoM')
+        .thetaM = Parameter(90, name='MGN_2 thetaM')
+      .material
+        .irho = Parameter(-0, name='MGN_2 irho')
+        .rho = Parameter(2.39381, name='MGN_2 rho', bounds=(0,10))
+      .thickness = Parameter(67.8199, name='MGN_2 thickness', bounds=(0,400))
+    [3]
+      .interface = Parameter(0, name='air interface')
+      .material = None
+      .thickness = Parameter(0, name='air thickness')
+  .thickness = stack thickness:243.659
+
+[chisq=68.569(86), nllf=4594.12]
+[overall chisq=49.28(11), nllf=6012.01]
+              Parameter       mean  median    best [   68% interval] [   95% interval]
+ 1 T300 MGN_1  interfaceM above    132(54)   144.6   185.1 [     68     187] [     12     198]
+ 2 T050 MGN_1  interfaceM above  197.0(30)  197.90  199.29 [  194.5   199.5] [  189.1   199.9]
+ 3 T300 MGN_1 interfaceM below    2.9(89)   1.715   0.834 [   0.49    3.78] [   0.07    9.75]
+ 4 T050 MGN_1 interfaceM below    161(29)   166.6   179.8 [    130     191] [     94     199]
+ 5      T300 MGN_1 rhoM  0.110(36)   0.114   0.139 [   0.07    0.15] [   0.05    0.17]
+ 6      T050 MGN_1 rhoM 0.0204(13) 0.02062 0.02124 [ 0.0194  0.0213] [ 0.0176  0.0220]
+ 7 T300 MGN_2  interfaceM above     49(64)    13.2     2.8 [      4     142] [      1     191]
+ 8 T050 MGN_2  interfaceM above   54.7(29)   54.32   52.64 [   52.1    57.2] [   50.3    61.6]
+ 9 T300 MGN_2 interfaceM below    101(58)   101.7    60.4 [     32     169] [      5     195]
+10 T050 MGN_2 interfaceM below    101(58)   101.7   139.0 [     33     169] [      5     195]
+11      T300 MGN_2 rhoM -61(75)e-3  -0.081  -0.100 [  -0.13    0.05] [  -0.17    0.08]
+12      T050 MGN_2 rhoM -0.201(32)  -0.201  -0.229 [  -0.23   -0.17] [  -0.26   -0.14]
+13           background 6.61(91)e-6 0.00000663 0.00000664 [0.0000057 0.0000075] [0.0000048 0.0000083]
+14            intensity 1.0711(36)  1.0712  1.0714 [  1.068   1.074] [  1.065   1.077]
+15       LSAT interface   4.39(29)   4.396   4.414 [   4.12    4.67] [   3.82    4.92]
+16             LSAT rho 4.6540(20) 4.65405 4.65363 [ 4.6522  4.6559] [ 4.6503  4.6576]
+17      MGN_1 interface   0.94(75)   0.789   0.116 [   0.22    1.67] [   0.03    2.68]
+18            MGN_1 rho  0.911(13)  0.9116  0.9065 [  0.899   0.924] [  0.887   0.935]
+19      MGN_1 thickness 175.93(26) 175.922 175.840 [ 175.69  176.16] [ 175.46  176.42]
+20      MGN_2 interface  29.69(48)  29.671  29.764 [  29.26   30.12] [  28.86   30.60]
+21            MGN_2 rho  2.395(26)  2.3933  2.3938 [  2.371   2.417] [  2.351   2.443]
+22      MGN_2 thickness  67.76(68)  67.785  67.820 [  67.18   68.37] [  66.50   68.93]
+23           background 0.38(34)e-6 0.00000029 0.00000001 [0.0000001 0.0000007] [0.0000000 0.0000012]
+24            intensity 0.8960(25) 0.89603 0.89420 [ 0.8937  0.8984] [ 0.8914  0.9007]
