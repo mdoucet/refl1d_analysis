@@ -365,7 +365,7 @@ class ReflectivityProblem(object):
         return printout
 
 class Accumulator(object):
-    def __init__(self, name='', z_min=-150, z_max=450, z_step=5.0):
+    def __init__(self, name='', z_min=-10, z_max=450, z_step=5.0):
         self.z = np.arange(z_min, z_max, z_step)
         self.summed = np.zeros(len(self.z)-1)
         self.sq_summed = np.zeros(len(self.z)-1)
@@ -374,7 +374,7 @@ class Accumulator(object):
         self.counts = np.zeros(len(self.z)-1)
         self.z_step = z_step
         self.name = name
-        
+
     def add(self, z, rho, rhoM):
         """ Add a model to the average """
         z_ = np.asarray([z[i] for i in range(0, len(z), 2)])
@@ -382,7 +382,7 @@ class Accumulator(object):
         r_out = rebin(z_, rho_, self.z)
         rhoM_ = np.asarray([rhoM[i+1] for i in range(0, len(rhoM)-2, 2)])
         rM_out = rebin(z_, rhoM_, self.z)
-        
+
         # Compute the average step size so we can normalize after rebinning
         average_step = np.asarray([z[i+1]-z[i] for i in range(0, len(z)-2, 2) if z[i]>0]).mean()
         r_out = r_out * average_step / self.z_step
@@ -396,34 +396,35 @@ class Accumulator(object):
         self.counts += _counts
 
     def mean(self):
-        avg = self.summed / self.counts
-        sq_avg = self.sq_summed / self.counts
+        _counts = np.asarray([ 1 if c==0 else c for c in self.counts ])
+        avg = self.summed / _counts
+        sq_avg = self.sq_summed / _counts
         sig = np.sqrt(sq_avg - avg*avg)
-        
+
         return avg, sig
-    
+
     def mean_magnetism(self):
-        avg = self.m_summed / self.counts
-        sq_avg = self.m_sq_summed / self.counts
+        _counts = np.asarray([ 1 if c==0 else c for c in self.counts ])
+        avg = self.m_summed / _counts
+        sq_avg = self.m_sq_summed / _counts
         sig = np.sqrt(sq_avg - avg*avg)
-        
+
         return avg, sig
-    
+
 def process(filepath, output):
     """
         Process a model output
     """
-  
     model = ReflectivityProblem(filepath)
     print(model)
-    
+
     print("Number of fit pars: %s" % len(model.fit_params))
-    
+
     statistics = model.load_bumps()
     for s in statistics.keys():
         avg, sig = statistics[s].mean()
         avg_m, sig_m = statistics[s].mean_magnetism()
-        
+
         base_name, ext = os.path.splitext(output)
         base_name += '_%s' % statistics[s].name
         _output = base_name+ext
@@ -431,7 +432,6 @@ def process(filepath, output):
             for i in range(len(avg)):
                 fd.write("%s %s %s %s %s\n" % (statistics[s].z[i], avg[i], sig[i], avg_m[i], sig_m[i]))
 
-                
 if __name__ == "__main__":
     """
         Interactive run command
