@@ -1,8 +1,11 @@
+#pylint: disable=missing-docstring, line-too-long, too-many-instance-attributes, invalid-name, too-few-public-methods, exec-used, no-self-use, too-many-statements, too-many-locals
 """
     Process chains from a refl1d output population and extract statistics
 """
+from __future__ import absolute_import, division, print_function
 import logging
-import json, re
+import json
+import re
 import time
 import argparse
 import os
@@ -60,10 +63,16 @@ class Layer(object):
         self.name = name
         self.is_magnetic = False
         self.rho = 0
+        self.rhoM = 0
+        self.thetaM = 0
+        self.interface_above = 0
+        self.interface_below = 0
+        self.dead_above = 0
+        self.dead_below = 0
         self.irho = 0
         self.thickness = 0
         self.interface = 0
-        
+
         for p, value in parameters.items():
             par_name = p.replace(name, '').strip()
             if p.endswith('M') or 'interfaceM' in p or 'deadM' in p:
@@ -84,12 +93,12 @@ class Layer(object):
 
     def __repr__(self):
         return "%s\n%s" % (self.material(), self.layer())
-        
+
 class ReflectivityModel(object):
     def __init__(self, info, layers):
         self.refl_model = info
         self.layers = layers
-        
+
         if 'data_path' in info:
             self.name = info['data_path']
         else:
@@ -125,12 +134,10 @@ class ReflectivityModel(object):
             layer_str = 'Layer %s:  \n    ' % layer_name
             mag_str = '    '
             k_list = {}
-            
 
-            
             for p in sorted(l.keys()):
-                k_list[p.replace(layer_name, '').strip()] = l[p] 
-            
+                k_list[p.replace(layer_name, '').strip()] = l[p]
+
             for p in sorted(k_list.keys(), key=str.lower):
                 if p == 'info':
                     continue
@@ -142,10 +149,10 @@ class ReflectivityModel(object):
 
             printout += "%s\n" % layer_str
             printout += "%s\n\n" % mag_str
-        
+
         printout += '\n'
         return printout
-            
+
 
 class ReflectivityProblem(object):
     def __init__(self, file_path):
@@ -154,7 +161,7 @@ class ReflectivityProblem(object):
         self.fit_params = []
 
         with open('%s.err' % file_path, 'r') as fd:
-            self.model_list, chi2, self.fit_params = self.parse_slabs(fd.read())
+            self.model_list, _, self.fit_params = self.parse_slabs(fd.read())
 
     def parse_slabs(self, content):
         """
@@ -195,7 +202,7 @@ class ReflectivityProblem(object):
                 if len(current_layer) > 0:
                     layers[current_layer_name] = current_layer
                     model_list.append([refl_model, layers])
-                    
+
             if l.startswith("[overall chisq="):
                 result = re.search(r'chisq=([\d.]*)', l)
                 if result is not None:
@@ -251,7 +258,7 @@ class ReflectivityProblem(object):
                         current_layer[result.group(2)] = result.group(1)
                         if current_layer_name is None:
                             toks = result.group(2).split(' ')
-                            current_layer_name = toks[0].strip() 
+                            current_layer_name = toks[0].strip()
 
             par_name, value, error = parse_single_param(l)
             if par_name is not None:
@@ -262,7 +269,7 @@ class ReflectivityProblem(object):
                 _par_name = par_name.replace('below', '')
                 _name_toks = _par_name.strip().split(' ')
                 name_toks = par_name.strip().split(' ')
-                
+
                 if len(_name_toks) >= 3:
                     #par_name = ' '.join(name_toks[1:])
                     if name_toks[0] not in discovered_names:
@@ -281,8 +288,8 @@ class ReflectivityProblem(object):
     def replace(self, parameter_list):
         """ Replace fit parameters in our models """
         if not len(self.fit_params) == len(parameter_list):
-            logging.error("Parameter list of wrong length: found %s and expected %s" % (len(self.fit_params), len(parameter_list)))
-        
+            logging.error("Parameter list of wrong length: found %s and expected %s", len(self.fit_params), len(parameter_list))
+
         for i in range(len(self.fit_params)):
             # Skip background and intensity for now since they have the same names for both models
             if self.fit_params[i][0] in ['background', 'intensity']:
@@ -318,9 +325,9 @@ class ReflectivityProblem(object):
     def load_bumps(self):
         """
             Use bumps to load MC
-            
+
             Example: to histograme first parameter: hist(draw.points[:, 0])
-        
+
             We can use draw() instead of sample() [deprecated]
         """
         acc = {}
@@ -330,7 +337,7 @@ class ReflectivityProblem(object):
         t0 = time.time()
         state = dream.state.load_state(self.file_path)
         state.mark_outliers()
-        
+
         drawn = state.draw()
 
         # If we have a population, only pick 1000 of them
@@ -338,7 +345,7 @@ class ReflectivityProblem(object):
             print("Too many points: pruning down to 1000")
             portion = 1000.0 / len(drawn.points)
             drawn = state.draw(portion=portion)
-        
+
         if not len(drawn.points[0]) == len(self.fit_params):
             raise RuntimeError("Length of point array is wrong")
         print("MC file read: %s sec" % (time.time()-t0))
@@ -351,7 +358,7 @@ class ReflectivityProblem(object):
 
         print("Done %s sec" % (time.time()-t0))
         return acc
-            
+
     def __repr__(self):
         """ Pretty print the fit problem """
         printout = ""
@@ -417,7 +424,6 @@ def process(filepath, output):
     """
     model = ReflectivityProblem(filepath)
     print(model)
-
     print("Number of fit pars: %s" % len(model.fit_params))
 
     statistics = model.load_bumps()
@@ -435,7 +441,7 @@ def process(filepath, output):
 if __name__ == "__main__":
     """
         Interactive run command
-        
+
         python refl1d_model.py -o model152both_stats.txt -m /SNS/REF_M/IPTS-19586/shared/fiting/MGN152Both_3/model152both
 
         python refl1d_model.py -o test_stats.txt -m /SNS/users/m2d/git/refl1d_analysis/playground/matfit/model152both
@@ -457,7 +463,3 @@ if __name__ == "__main__":
 
     process(namespace.model_path, namespace.output_name)
 
-        
-
-    
-    
