@@ -316,7 +316,7 @@ class ReflectivityProblem(object):
             exp = Experiment(probe=probe, sample=sample, dz=2)
             #z,rho,irho,rhoM,thetaM = np.array(exp.magnetic_profile())
             #z,rho,irho = np.array(exp.step_profile())
-            M = np.array(exp.magnetic_profile())
+            M = np.array(exp.magnetic_smooth_profile())
             #N = np.array(exp.step_profile())
             sld_profiles.append([name, M])
 
@@ -326,7 +326,7 @@ class ReflectivityProblem(object):
         """
             Use bumps to load MC
 
-            Example: to histograme first parameter: hist(draw.points[:, 0])
+            Example: to histogram first parameter: hist(draw.points[:, 0])
 
             We can use draw() instead of sample() [deprecated]
         """
@@ -352,6 +352,7 @@ class ReflectivityProblem(object):
         for pars in drawn.points:
             self.replace(pars)
             profiles = self.convert_to_model()
+            #print(profiles[])
             for p in profiles:
                 z, r, _, rM, _ = p[1]
                 acc[p[0]].add(z, r, rM)
