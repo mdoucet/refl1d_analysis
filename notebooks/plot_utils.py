@@ -4,7 +4,7 @@ import plotly.graph_objs as go
 py.init_notebook_mode(connected=True)
 
 def plot1d(data_list, data_names=None, x_title='', y_title='',
-           x_log=False, y_log=False, show_dx=True):
+           x_log=False, y_log=False, show_dx=True, width=800, height=400):
     """
         Produce a 1D plot
         @param data_list: list of traces [ [x1, y1], [x2, y2], ...]
@@ -58,8 +58,8 @@ def plot1d(data_list, data_names=None, x_title='', y_title='',
     layout = go.Layout(
         showlegend=show_legend,
         autosize=True,
-        width=600,
-        height=400,
+        width=width,
+        height=height,
         margin=dict(t=40, b=40, l=80, r=40),
         hovermode='closest',
         bargap=0,
