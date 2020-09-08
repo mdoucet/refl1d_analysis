@@ -1,0 +1,11 @@
+name: playground
+dependencies:
+- numpy
+- nb_conda
+- pip:
+  - pandas
+  - plotly
+  - scipy
+  - periodictable
+  - refl1d
+  - matplotlib
