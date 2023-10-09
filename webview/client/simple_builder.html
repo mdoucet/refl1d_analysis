@@ -6,11 +6,14 @@
     <title>Vue.js Dictionary Table</title>
     <!-- Include Vue.js -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="//jqueryui.com/wp-content/themes/jquery/css/base.css?v=4">
+    <link rel="stylesheet" href="//jqueryui.com/wp-content/themes/jqueryui.com/style.css?v=2">
 </head>
 <body>
     <div id="app">
         <button @click="loadDictionary">Load Dictionary</button>
         <button @click="addLayer">Add Row</button>
+        <button @click="process">Process</button>
         <table v-if="dictionaryLoaded">
             <thead>
                 <tr>
@@ -23,8 +26,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(layer, i) in sortedLayers">
-                    <td><input type="number" step="1" v-model="i"></td>
+                <tr v-for="(layer, key) in sortedLayers" :key="key">
+                    <td><input type="number" step="1" v-model="layer.order"></td>
                     <td><input type="text" v-model="layer.name"></td>
                     <td><input type="number" step="5" v-model="layer.thickness.slot.value"></td>
                     <td><input type="number" step="0.01" v-model="layer.material.rho.slot.value"></td>
@@ -33,7 +36,7 @@
                 </tr>
             </tbody>
         </table>
-        <p v-else>Loading dictionary...</p>
+        <p v-else>Click Load Dictionary</p>
     </div>
 
     <script src="builder.js"></script>
